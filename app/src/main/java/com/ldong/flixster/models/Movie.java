@@ -3,35 +3,44 @@ package com.ldong.flixster.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class Movie {
     String posterPath;
-    String title;
-    String overview;
+    String movieName;
+    String movieDesc;
     String backdropPath;
+    double movieRating;
+    int movieId;
+    double popularity;
 
-    //constructor to take in a json object, and react on the fields we care about
-    public Movie(JSONObject jsonObject) throws JSONException {
-        posterPath = jsonObject.getString("poster_path");
-        backdropPath = jsonObject.getString("backdrop_path");
-        title = jsonObject.getString("title");
-        overview = jsonObject.getString("overview");
+    //Empty Constructor needed for the Parcel Library
+    public Movie(){
     }
 
-    //why a static method here??
-    public static List<Movie>  fromJSONArray(JSONArray movieJSONArray) throws JSONException {
+    public Movie(JSONObject jsonObj) throws JSONException {
+        backdropPath = jsonObj.getString("backdrop_path");
+        posterPath = jsonObj.getString("poster_path");
+        movieName = jsonObj.getString("title");
+        movieDesc = jsonObj.getString("overview");
+        movieRating = jsonObj.getDouble("vote_average");
+        movieId = jsonObj.getInt("id");
+        popularity = jsonObj.getDouble("popularity");
+    }
+
+    public static List<Movie> fromJSONArray(JSONArray movieJSONArray) throws JSONException {
         List<Movie> movieList = new ArrayList<>();
-        for (int i = 0; i < movieJSONArray.length(); i++) {
+        for(int i=0; i<movieJSONArray.length(); i++){
             movieList.add(new Movie(movieJSONArray.getJSONObject(i)));
         }
         return movieList;
     }
 
     public String getPosterPath() {
-        //absolute path: %s here's what i want to replace with the item after ,
         return String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);
     }
 
@@ -39,12 +48,23 @@ public class Movie {
         return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);
     }
 
-    public String getTitle() {
-        return title;
+    public String getMovieName() {
+        return movieName;
     }
 
-    public String getOverview() {
-        return overview;
+    public String getMovieDesc() {
+        return movieDesc;
     }
 
+    public double getMovieRating() {
+        return movieRating;
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public double getPopularity() {
+        return popularity;
+    }
 }
